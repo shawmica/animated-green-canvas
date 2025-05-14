@@ -31,7 +31,8 @@ const Index = () => {
     const hiddenElements = document.querySelectorAll(".reveal");
     hiddenElements.forEach((el) => {
       el.classList.remove("animate-fade-in");
-      el.style.opacity = "0";
+      // Fix: Cast the element to HTMLElement to access style property
+      (el as HTMLElement).style.opacity = "0";
       observer.observe(el);
     });
 
