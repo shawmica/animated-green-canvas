@@ -2,6 +2,7 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
+import { useState } from "react";
 
 type Project = {
   title: string;
@@ -13,6 +14,8 @@ type Project = {
 };
 
 export default function ProjectsSection() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   const projects: Project[] = [
     {
       title: "E-commerce Platform",
@@ -45,29 +48,49 @@ export default function ProjectsSection() {
   ];
 
   return (
-    <section id="projects" className="py-20">
+    <section id="projects" className="py-20 relative">
+      {/* Decorative background element */}
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-accent/20 rounded-bl-full opacity-50 -z-10"></div>
+      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-accent/20 rounded-tr-full opacity-50 -z-10"></div>
+      
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">My Projects</h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
-          <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
+        <div className="text-center mb-16 reveal">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 relative inline-block">
+            My Projects
+            <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-primary"></span>
+          </h2>
+          <p className="max-w-2xl mx-auto text-lg text-muted-foreground mt-6">
             Here are some of my recent projects. Each one presented unique challenges and learning opportunities.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
-            <Card key={index} className="overflow-hidden card-hover animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
-              {/* Project Image or Placeholder */}
-              <div className="h-52 bg-muted relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/30"></div>
+            <Card 
+              key={index} 
+              className={`
+                overflow-hidden reveal transform transition-all duration-500 
+                ${hoveredIndex === index ? 'scale-[1.02] shadow-lg shadow-primary/20' : 'scale-100'}
+              `}
+              style={{ animationDelay: `${index * 0.1}s` }}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              {/* Project Image with enhanced hover effect */}
+              <div className="h-52 bg-muted relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/30 transform transition-transform duration-500 group-hover:scale-110"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-xl font-bold text-primary/50">{project.title}</div>
+                  <div className="text-xl font-bold text-primary/70 transform transition-all duration-500 group-hover:scale-110 group-hover:text-primary">{project.title}</div>
                 </div>
+                {/* Animated overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
 
               <CardHeader>
-                <CardTitle>{project.title}</CardTitle>
+                <CardTitle className="relative">
+                  {project.title}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transform transition-all duration-300 group-hover:w-full"></span>
+                </CardTitle>
               </CardHeader>
               
               <CardContent>
@@ -76,7 +99,7 @@ export default function ProjectsSection() {
                   {project.technologies.map((tech, i) => (
                     <span
                       key={i}
-                      className="px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full"
+                      className="px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full transform transition-all duration-300 hover:scale-105 hover:bg-primary/20"
                     >
                       {tech}
                     </span>
@@ -87,17 +110,22 @@ export default function ProjectsSection() {
               <CardFooter className="flex gap-2">
                 <Button 
                   variant="outline" 
-                  className="flex-1 button-hover"
+                  className="flex-1 group overflow-hidden relative"
                   onClick={() => window.open(project.githubUrl, "_blank")}
                 >
-                  <Github className="mr-2 h-4 w-4" /> Code
+                  <span className="relative z-10 flex items-center">
+                    <Github className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" /> 
+                    Code
+                  </span>
+                  <span className="absolute inset-0 bg-primary/10 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
                 </Button>
                 {project.liveUrl && (
                   <Button 
-                    className="flex-1 button-hover"
+                    className="flex-1 group overflow-hidden relative"
                     onClick={() => window.open(project.liveUrl!, "_blank")}
                   >
-                    Live Demo
+                    <span className="relative z-10">Live Demo</span>
+                    <span className="absolute inset-0 bg-primary/20 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
                   </Button>
                 )}
               </CardFooter>

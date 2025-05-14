@@ -10,13 +10,19 @@ import Footer from "@/components/footer";
 import { useEffect } from "react";
 
 const Index = () => {
-  // Add scroll reveal effect
+  // Enhanced scroll reveal effect with staggered animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in");
+            // Get data-delay attribute or default to 0
+            const delay = entry.target.getAttribute('data-delay') || '0';
+            // Apply the animation with the delay
+            setTimeout(() => {
+              entry.target.classList.add("animate-fade-in");
+              (entry.target as HTMLElement).style.opacity = "1";
+            }, parseInt(delay));
             observer.unobserve(entry.target);
           }
         });
@@ -24,13 +30,15 @@ const Index = () => {
       {
         root: null,
         rootMargin: "0px",
-        threshold: 0.1,
+        threshold: 0.15, // Slightly increased threshold for better timing
       }
     );
 
     const hiddenElements = document.querySelectorAll(".reveal");
-    hiddenElements.forEach((el) => {
+    hiddenElements.forEach((el, index) => {
       el.classList.remove("animate-fade-in");
+      // Set staggered delays based on element position
+      el.setAttribute('data-delay', (index * 100).toString());
       // Fix: Cast the element to HTMLElement to access style property
       (el as HTMLElement).style.opacity = "0";
       observer.observe(el);
