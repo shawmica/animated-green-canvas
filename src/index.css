@@ -1,68 +1,69 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 350 15% 96%;
-    --foreground: 350 50% 15%;
+    --background: 210 15% 96%;
+    --foreground: 210 50% 15%;
 
-    --card: 350 15% 93%;
-    --card-foreground: 350 50% 15%;
+    --card: 210 15% 93%;
+    --card-foreground: 210 50% 15%;
 
-    --popover: 350 15% 96%;
-    --popover-foreground: 350 50% 15%;
+    --popover: 210 15% 96%;
+    --popover-foreground: 210 50% 15%;
 
-    --primary: 350 80% 25%;
-    --primary-foreground: 350 10% 95%;
+    --primary: 215 80% 35%;
+    --primary-foreground: 210 10% 95%;
 
-    --secondary: 350 20% 85%;
-    --secondary-foreground: 350 50% 15%;
+    --secondary: 210 20% 85%;
+    --secondary-foreground: 210 50% 15%;
 
-    --muted: 350 15% 85%;
-    --muted-foreground: 350 30% 35%;
+    --muted: 210 15% 85%;
+    --muted-foreground: 210 30% 35%;
 
-    --accent: 350 60% 85%;
-    --accent-foreground: 350 70% 15%;
+    --accent: 210 60% 85%;
+    --accent-foreground: 210 70% 15%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 350 10% 95%;
+    --destructive-foreground: 210 10% 95%;
 
-    --border: 350 20% 80%;
-    --input: 350 20% 80%;
-    --ring: 350 80% 25%;
+    --border: 210 20% 80%;
+    --input: 210 20% 80%;
+    --ring: 215 80% 35%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 350 25% 12%;
-    --foreground: 350 10% 90%;
+    --background: 210 25% 12%;
+    --foreground: 210 10% 90%;
 
-    --card: 350 25% 16%;
-    --card-foreground: 350 10% 90%;
+    --card: 210 25% 16%;
+    --card-foreground: 210 10% 90%;
 
-    --popover: 350 25% 12%;
-    --popover-foreground: 350 10% 90%;
+    --popover: 210 25% 12%;
+    --popover-foreground: 210 10% 90%;
 
-    --primary: 350 70% 40%;
-    --primary-foreground: 350 10% 95%;
+    --primary: 215 70% 50%;
+    --primary-foreground: 210 10% 95%;
 
-    --secondary: 350 20% 25%;
-    --secondary-foreground: 350 10% 90%;
+    --secondary: 210 20% 25%;
+    --secondary-foreground: 210 10% 90%;
 
-    --muted: 350 15% 25%;
-    --muted-foreground: 350 10% 65%;
+    --muted: 210 15% 25%;
+    --muted-foreground: 210 10% 65%;
 
-    --accent: 350 30% 25%;
-    --accent-foreground: 350 60% 90%;
+    --accent: 210 30% 25%;
+    --accent-foreground: 210 60% 90%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 350 10% 95%;
+    --destructive-foreground: 210 10% 95%;
 
-    --border: 350 20% 30%;
-    --input: 350 20% 30%;
-    --ring: 350 70% 40%;
+    --border: 210 20% 30%;
+    --input: 210 20% 30%;
+    --ring: 215 70% 50%;
   }
 }
 
@@ -111,12 +112,12 @@
   }
   
   .text-glow:hover {
-    text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+    text-shadow: 0 0 8px rgba(100, 200, 255, 0.6);
   }
   
   /* Background patterns */
   .bg-pattern {
-    background-image: radial-gradient(rgba(80, 200, 120, 0.1) 2px, transparent 2px);
+    background-image: radial-gradient(rgba(100, 160, 220, 0.1) 2px, transparent 2px);
     background-size: 20px 20px;
   }
   
@@ -191,21 +192,126 @@
   @apply w-full;
 }
 
-/* Custom animations for maroon theme */
+/* Custom animations for cool theme */
 .glowing-border {
   @apply relative after:absolute after:inset-0 after:rounded-lg after:border-2 after:border-primary/50 after:animate-pulse;
 }
 
-.maroon-gradient {
-  background: linear-gradient(135deg, hsl(350 70% 25%), hsl(340 60% 30%));
+.cool-gradient {
+  background: linear-gradient(135deg, hsl(210 70% 25%), hsl(220 60% 30%));
 }
 
-.maroon-shimmer {
-  background: linear-gradient(90deg, rgba(128,0,32,0) 0%, rgba(128,0,32,0.1) 50%, rgba(128,0,32,0) 100%);
+.cool-shimmer {
+  background: linear-gradient(90deg, rgba(100,160,220,0) 0%, rgba(100,160,220,0.1) 50%, rgba(100,160,220,0) 100%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
 
 .card-border-glow {
   @apply relative overflow-hidden before:absolute before:inset-0 before:rounded-xl before:p-[2px] before:bg-gradient-to-r before:from-primary/50 before:via-primary before:to-primary/50 before:animate-pulse-slow;
+}
+
+/* Section visibility animations */
+.section-hidden {
+  @apply opacity-0 transform translate-y-20 transition-all duration-1000;
+}
+
+.section-visible {
+  @apply opacity-100 transform translate-y-0;
+}
+
+/* Advanced skill card animations */
+.skill-card {
+  @apply transition-all duration-500 transform-gpu;
+}
+
+.skill-card:hover {
+  @apply shadow-2xl shadow-primary/20 scale-[1.03] z-10;
+}
+
+.skill-item {
+  @apply transition-all duration-300 transform;
+}
+
+.skill-item:hover {
+  @apply -translate-y-1 bg-primary/10;
+}
+
+/* 3D card effect */
+.card-3d {
+  @apply transition-all duration-300 perspective;
+  transform-style: preserve-3d;
+}
+
+.card-3d:hover {
+  transform: rotateY(5deg) rotateX(5deg);
+}
+
+.perspective {
+  perspective: 1000px;
+}
+
+/* Wave animation */
+.wave {
+  animation: wave 3s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Orbit animation */
+.orbit {
+  @apply absolute rounded-full;
+  animation: orbit 8s linear infinite;
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(50px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(50px) rotate(-360deg);
+  }
+}
+
+/* Advanced ripple effect */
+.ripple {
+  @apply relative overflow-hidden;
+}
+
+.ripple::after {
+  content: '';
+  @apply absolute rounded-full bg-primary/30 w-0 h-0 opacity-50;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ripple 1.5s ease-out infinite;
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.8;
+  }
+  100% {
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+  }
+}
+
+/* Ice crystal background */
+.ice-pattern {
+  background-image: 
+    radial-gradient(rgba(100, 200, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(rgba(100, 200, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
 }

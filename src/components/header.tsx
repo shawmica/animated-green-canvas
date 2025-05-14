@@ -1,88 +1,110 @@
 
+import { ThemeToggle } from "./theme-toggle";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Menu } from "lucide-react";
+import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
-interface NavItem {
-  label: string;
-  href: string;
+interface HeaderProps {
+  activeSection?: string | null;
 }
 
-const navItems: NavItem[] = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
-];
-
-export default function Header() {
+export default function Header({ activeSection }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-
+    
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  
+  const navItems = [
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "skills", label: "Skills" },
+    { id: "projects", label: "Projects" },
+    { id: "experience", label: "Experience" },
+    { id: "contact", label: "Contact" },
+  ];
+  
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setIsMobileMenuOpen(false);
+    }
+  };
+  
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "py-2 bg-background/80 backdrop-blur-lg shadow-md" : "py-4 bg-transparent"
-      }`}
+    <header 
+      className={cn(
+        "fixed top-0 left-0 w-full z-50 transition-all duration-300 backdrop-blur-md",
+        isScrolled ? "bg-background/80 shadow-md" : "bg-transparent"
+      )}
     >
-      <div className="container flex items-center justify-between">
-        <a href="#home" className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity">
-          Portfolio
-        </a>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="hover-link font-medium text-foreground/80 hover:text-primary transition-colors"
-            >
-              {item.label}
-            </a>
-          ))}
-          <ThemeToggle />
-        </nav>
-
-        {/* Mobile Menu Button */}
-        <div className="flex md:hidden items-center gap-2">
-          <ThemeToggle />
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Toggle Menu"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          <a 
+            href="#home" 
+            className="text-xl md:text-2xl font-bold text-primary hover:text-primary/80 transition-colors"
           >
-            <Menu className="h-5 w-5" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Mobile Navigation Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-background/95 backdrop-blur-lg shadow-lg animate-fade-in">
-          <nav className="container py-4 flex flex-col space-y-4">
+            John Doe
+          </a>
+          
+          <nav className="hidden md:flex items-center gap-6">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="font-medium text-foreground/80 hover:text-primary transition-colors px-2 py-1"
-                onClick={() => setIsMobileMenuOpen(false)}
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={cn(
+                  "border-animated font-medium transition-all duration-300 hover:text-primary",
+                  activeSection === item.id 
+                    ? "text-primary border-primary" 
+                    : "text-muted-foreground"
+                )}
               >
                 {item.label}
-              </a>
+              </button>
+            ))}
+          </nav>
+          
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            
+            <Button
+              variant="outline"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Mobile navigation */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden shadow-lg border-t">
+          <nav className="flex flex-col py-4 bg-background/95 backdrop-blur-lg">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={cn(
+                  "py-3 px-4 text-left transition-all duration-300 hover:bg-primary/10",
+                  activeSection === item.id 
+                    ? "text-primary font-medium bg-primary/5" 
+                    : "text-muted-foreground"
+                )}
+              >
+                {item.label}
+              </button>
             ))}
           </nav>
         </div>
