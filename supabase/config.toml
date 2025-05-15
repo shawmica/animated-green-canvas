@@ -1,1 +1,5 @@
+
 project_id = "twxfeitzbttgsolojlgz"
+
+[functions.send-contact-email]
+verify_jwt = false # Allow unauthenticated access as it's a public contact form

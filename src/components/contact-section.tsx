@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Github, Linkedin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client"; // Import Supabase client
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -22,15 +22,23 @@ export default function ContactSection() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
+
+    try {
+      const { data, error } = await supabase.functions.invoke("send-contact-email", {
+        body: formData,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Function invoked successfully:", data);
       toast({
         title: "Message sent!",
-        description: "Thanks for reaching out. I'll get back to you soon.",
+        description: "Thanks for reaching out. We'll get back to you soon.",
       });
       setFormData({
         name: "",
@@ -38,8 +46,16 @@ export default function ContactSection() {
         subject: "",
         message: "",
       });
+    } catch (error: any) {
+      console.error("Error sending message:", error);
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: error.message || "There was a problem sending your message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   const socialLinks = [
@@ -63,7 +79,7 @@ export default function ContactSection() {
   return (
     <section id="contact" className="py-20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
+        <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
           <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
           <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
@@ -73,7 +89,7 @@ export default function ContactSection() {
 
         <div className="grid md:grid-cols-2 gap-10">
           {/* Contact Form */}
-          <Card className="animate-scale-in">
+          <Card>
             <CardContent className="p-6">
               <h3 className="text-2xl font-bold mb-6">Send Me a Message</h3>
               
@@ -150,7 +166,7 @@ export default function ContactSection() {
           </Card>
 
           {/* Contact Information */}
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-8">
             <div>
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
               <p className="text-muted-foreground mb-6">
