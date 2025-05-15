@@ -33,7 +33,7 @@ export default function AboutSection() {
       </div>
       
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 reveal">
+        <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 relative inline-block">
             About Me
             <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-primary"></span>
@@ -45,7 +45,7 @@ export default function AboutSection() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-10 mb-16 items-center">
-          <div className="space-y-6 reveal">
+          <div className="space-y-6">
             <h3 className="text-2xl font-bold relative inline-block">
               My Journey
               <span className="absolute -bottom-1 left-0 w-1/3 h-0.5 bg-primary/70"></span>
@@ -80,7 +80,7 @@ export default function AboutSection() {
           </div>
 
           <div className="order-first md:order-last">
-            <div className="relative h-80 overflow-hidden rounded-xl reveal">
+            <div className="relative h-80 overflow-hidden rounded-xl">
               <div className="absolute inset-0 bg-gradient-to-tl from-primary/80 to-primary/20 opacity-60 mix-blend-overlay"></div>
               <div className="w-full h-full bg-muted flex items-center justify-center text-6xl font-bold text-muted-foreground/30 relative">
                 <span className="sr-only">Developer image</span>
@@ -103,7 +103,7 @@ export default function AboutSection() {
           </div>
         </div>
 
-        <div className="mb-16 reveal">
+        <div className="mb-16">
           <h3 className="text-2xl font-bold text-center mb-10 relative inline-block">
             What I Do
             <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary/70"></span>

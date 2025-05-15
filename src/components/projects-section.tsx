@@ -54,7 +54,7 @@ export default function ProjectsSection() {
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-accent/20 rounded-tr-full opacity-50 -z-10"></div>
       
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 reveal">
+        <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 relative inline-block">
             My Projects
             <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-primary"></span>
@@ -69,7 +69,7 @@ export default function ProjectsSection() {
             <Card 
               key={index} 
               className={`
-                overflow-hidden reveal transform transition-all duration-500 
+                overflow-hidden transform transition-all duration-500 
                 ${hoveredIndex === index ? 'scale-[1.02] shadow-lg shadow-primary/20' : 'scale-100'}
               `}
               style={{ animationDelay: `${index * 0.1}s` }}
