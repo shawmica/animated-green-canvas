@@ -3,7 +3,9 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@3.4.0"; // Using a recent version of Resend
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const CONTACT_EMAIL_TO = "hello@johndoe.com"; // The email address that will receive the contact messages
+// IMPORTANT: Change this to your Resend verified email for testing,
+// or your desired recipient email after verifying your domain with Resend.
+const CONTACT_EMAIL_TO = "YOUR_VERIFIED_RESEND_EMAIL_OR_DOMAIN_EMAIL@example.com"; 
 const EMAIL_SENDER = "Lovable Portfolio <onboarding@resend.dev>"; // Resend requires a verified domain or uses onboarding@resend.dev for testing
 
 const corsHeaders = {
@@ -47,7 +49,7 @@ serve(async (req: Request) => {
     // Email to the website owner
     const ownerEmailResponse = await resend.emails.send({
       from: EMAIL_SENDER,
-      to: [CONTACT_EMAIL_TO],
+      to: [CONTACT_EMAIL_TO], // This is where the notification goes
       subject: `New Contact Form Submission: ${subject}`,
       html: `
         <h1>New Contact Form Submission</h1>
@@ -59,12 +61,19 @@ serve(async (req: Request) => {
       `,
     });
 
-    console.log("Email to owner sent successfully:", ownerEmailResponse);
+    // Check if sending to owner failed and log appropriately
+    if (ownerEmailResponse.error) {
+      console.error("Error sending email to owner:", ownerEmailResponse.error);
+      // Optionally, you might not want to proceed if this crucial email fails.
+      // However, we'll still try to send the confirmation to the user.
+    } else {
+      console.log("Email to owner sent successfully:", ownerEmailResponse.data);
+    }
 
     // Confirmation email to the sender
     const senderConfirmationResponse = await resend.emails.send({
       from: EMAIL_SENDER,
-      to: [email],
+      to: [email], // This is the email provided in the form
       subject: "We've received your message!",
       html: `
         <h1>Thank you for contacting us, ${name}!</h1>
@@ -75,10 +84,24 @@ serve(async (req: Request) => {
         <p>Best regards,<br>The Team</p>
       `,
     });
-    console.log("Confirmation email to sender sent successfully:", senderConfirmationResponse);
+    
+    if (senderConfirmationResponse.error) {
+      console.error("Error sending confirmation email to sender:", senderConfirmationResponse.error);
+    } else {
+      console.log("Confirmation email to sender sent successfully:", senderConfirmationResponse.data);
+    }
 
+    // Determine overall success based on whether at least the sender confirmation was successful,
+    // or if the owner email was also successful.
+    if (ownerEmailResponse.error && senderConfirmationResponse.error) {
+      // Both emails failed
+      return new Response(JSON.stringify({ error: "Failed to send emails.", details: { owner: ownerEmailResponse.error, sender: senderConfirmationResponse.error } }), {
+        status: 500,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
 
-    return new Response(JSON.stringify({ message: "Emails sent successfully." }), {
+    return new Response(JSON.stringify({ message: "Emails processed." , ownerEmailData: ownerEmailResponse.data, senderEmailData: senderConfirmationResponse.data }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
@@ -91,3 +114,4 @@ serve(async (req: Request) => {
     });
   }
 });
+
