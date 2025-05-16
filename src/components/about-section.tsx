@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Code, Briefcase, User } from "lucide-react";
 import { useState } from "react";
@@ -103,8 +102,8 @@ export default function AboutSection() {
           </div>
         </div>
 
-        <div className="mb-16">
-          <h3 className="text-2xl font-bold text-center mb-10 relative inline-block">
+        <div className="mb-12">
+          <h3 className="text-2xl font-bold text-center mb-8 relative inline-block">
             What I Do
             <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary/70"></span>
           </h3>
